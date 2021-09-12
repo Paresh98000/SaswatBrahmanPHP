@@ -24,7 +24,7 @@ if ( ! class_exists( 'um\admin\core\Admin_Users' ) ) {
 
 			add_action( 'restrict_manage_users', array( &$this, 'restrict_manage_users' ) );
 
-			//add_filter( 'user_row_actions', array( &$this, 'user_row_actions' ), 10, 2 );
+			add_filter( 'user_row_actions', array( &$this, 'user_row_actions' ), 10, 2 );
 
 			add_filter( 'user_has_cap', array( &$this, 'map_caps_by_role' ), 10, 4 );
 
