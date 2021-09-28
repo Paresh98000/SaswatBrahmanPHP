@@ -89,7 +89,6 @@ jQuery(document).ready(function() {
 			if ( jQuery('#' + request_action).length ) {
 				request.password = password;
 			}
-
 			wp.ajax.send( 'um_request_user_data', {
 				data: request,
 				success: function (data) {
