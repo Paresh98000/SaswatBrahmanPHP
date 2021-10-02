@@ -343,7 +343,7 @@ if ( ! class_exists( 'um\core\Form' ) ) {
 		 */
 		public function form_init() {
 			if ( isset( $_SERVER['REQUEST_METHOD'] ) ) {
-			$http_post = ( 'POST' === $_SERVER['REQUEST_METHOD'] );
+				$http_post = ( 'POST' === $_SERVER['REQUEST_METHOD'] );
 			} else {
 				$http_post = 'POST';
 			}

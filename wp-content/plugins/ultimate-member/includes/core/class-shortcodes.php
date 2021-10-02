@@ -680,7 +680,7 @@ if ( ! class_exists( 'um\core\Shortcodes' ) ) {
 
 				if ( 'register' == $mode && is_user_logged_in() && ! $enable_loggedin_registration ) {
 					ob_get_clean();
-					return __( '<p>You are already registered</p>', 'ultimate-member' );
+					return __( 'You are already registered', 'ultimate-member' );
 				}
 			}
 

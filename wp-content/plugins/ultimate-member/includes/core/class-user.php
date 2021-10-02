@@ -16,6 +16,14 @@ if ( ! class_exists( 'um\core\User' ) ) {
 
 
 		/**
+		 * Data that we will set before the update profile to compare it after update
+		 *
+		 * @var null
+		 */
+		public $previous_data = null;
+
+
+		/**
 		 * User constructor.
 		 */
 		function __construct() {
@@ -463,7 +471,7 @@ if ( ! class_exists( 'um\core\User' ) ) {
 		 */
 		function get_profile_link( $user_id ) {
 			$profile_slug = $this->get_profile_slug( $user_id );
-			$profile_slug = str_replace('+','-',$profile_slug);
+
 			if ( empty( $profile_slug ) ) {
 				return false;
 			}
