@@ -473,8 +473,21 @@ A: Please be sure you are using a browser with CSS3 support.
 
 * Fixes an issue on WordPress multisite.
 
+= 1.0.74 =
+= 1.0.75 =
+
+* Displays the loading screen from the onclick link and not only the next page.
+
+= 1.0.76 =
+
+* Fixes a conflict with third-party themes.
+
+= 1.0.77 =
+
+* It does the 'Show loading screen when clicking on link' attribute optional and disabled by default to prevent conflicts with optimizer and cache plugins.
+
 == Upgrade Notice ==
 
-= 1.0.73 =
+= 1.0.77 =
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support

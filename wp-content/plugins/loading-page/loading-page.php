@@ -3,7 +3,7 @@
 Plugin Name: Loading Page
 Plugin URI: http://wordpress.dwbooster.com/content-tools/loading-page
 Description: Loading Page plugin performs a pre-loading of images on your website and displays a loading progress screen with percentage of completion. Once everything is loaded, the screen disappears.
-Version: 1.0.73
+Version: 1.0.77
 Author: CodePeople
 Author URI: http://wordpress.dwbooster.com/content-tools/loading-page
 License: GPLv2
@@ -267,7 +267,7 @@ if(!function_exists('loading_page_admin_resources')){
 		    wp_enqueue_style( 'thickbox' );
             wp_enqueue_script( 'thickbox' );
 
-            wp_enqueue_script('lp-admin-script', LOADING_PAGE_PLUGIN_URL.'/js/loading-page-admin.js', array('jquery', 'thickbox', 'farbtastic'), 'free-1.0.73');
+            wp_enqueue_script('lp-admin-script', LOADING_PAGE_PLUGIN_URL.'/js/loading-page-admin.js', array('jquery', 'thickbox', 'farbtastic'), 'free-1.0.77');
         }
     } // End loading_page_admin_resources
 }
@@ -428,6 +428,10 @@ if(!function_exists('loading_page_enqueue_scripts')){
 
         $op = get_option('loading_page_options');
         $loadingScreen = loading_page_loading_screen();
+        if($loadingScreen && !empty($op['from_trigger']))
+        {
+            wp_enqueue_script('codepeople-loading-page-link-script', LOADING_PAGE_PLUGIN_URL.'/js/links.js', array('jquery'), 'pro-5.0.75', false);
+        }
 
         if( $loadingScreen )
 		{
@@ -454,24 +458,24 @@ if(!function_exists('loading_page_enqueue_scripts')){
 
 			$required = array('jquery');
 			wp_enqueue_script('jquery');
-			 wp_enqueue_style('codepeople-loading-page-style', LOADING_PAGE_PLUGIN_URL.'/css/loading-page.css', array(), 'free-1.0.73', false);
-			wp_enqueue_style('codepeople-loading-page-style-effect', LOADING_PAGE_PLUGIN_URL.'/css/loading-page'.(($op['pageEffect'] != 'none') ? '-'.$op['pageEffect'] : '').'.css', array(), 'free-1.0.73', false);
+			 wp_enqueue_style('codepeople-loading-page-style', LOADING_PAGE_PLUGIN_URL.'/css/loading-page.css', array(), 'free-1.0.77', false);
+			wp_enqueue_style('codepeople-loading-page-style-effect', LOADING_PAGE_PLUGIN_URL.'/css/loading-page'.(($op['pageEffect'] != 'none') ? '-'.$op['pageEffect'] : '').'.css', array(), 'free-1.0.77', false);
 
             $s = loading_page_get_screen($op['loading_screen']);
             if($s)
 			{
                 if(!empty($s['style']))
 				{
-                    wp_enqueue_style('codepeople-loading-page-style-'.$s['id'], $s['style'], array(), 'free-1.0.73', false);
+                    wp_enqueue_style('codepeople-loading-page-style-'.$s['id'], $s['style'], array(), 'free-1.0.77', false);
                 }
 
                 if(!empty($s['script']))
 				{
-                    wp_enqueue_script('codepeople-loading-page-script-'.$s['id'], $s['script'], array('jquery'), 'free-1.0.73', false);
+                    wp_enqueue_script('codepeople-loading-page-script-'.$s['id'], $s['script'], array('jquery'), 'free-1.0.77', false);
                     $required[] = 'codepeople-loading-page-script-'.$s['id'];
                 }
             }
-            wp_enqueue_script('codepeople-loading-page-script', LOADING_PAGE_PLUGIN_URL.'/js/loading-page.js', $required, 'free-1.0.73', false);
+            wp_enqueue_script('codepeople-loading-page-script', LOADING_PAGE_PLUGIN_URL.'/js/loading-page.js', $required, 'free-1.0.77', false);
 			if(function_exists('wp_add_inline_script'))
 			{
 				wp_add_inline_script('codepeople-loading-page-script', 'loading_page_settings='.json_encode($loading_page_settings).';', 'before');
@@ -544,6 +548,7 @@ if(!function_exists('loading_page_settings_page')){
                 'codeBlock'     			=> $codeBlock,
                 'fullscreen'                => ( isset( $_POST['lp_fullscreen'] ) ) ? 1 : 0,
                 'enabled_loading_screen'    => (isset($_POST['lp_enabled_loading_screen'])) ? true : false,
+                'from_trigger'              => (isset($_POST['lp_from_trigger'])) ? true : false,
                 'close_btn'    				=> (isset($_POST['lp_close_btn'])) ? true : false,
                 'remove_in_on_load'    		=> (isset($_POST['lp_remove_in_on_load'])) ? true : false,
 				'screen_size'				=> (isset($_POST['lp_screen_size']) && in_array($_POST['lp_screen_size'], array('all', 'greater', 'lesser'))) ? $_POST['lp_screen_size'] : 'all',
@@ -580,6 +585,7 @@ if(!function_exists('loading_page_settings_page')){
         }
 
         $loading_page_options = get_option('loading_page_options');
+
 		$loading_page_video_tutorial = get_option('loading_page_video_tutorial', 'expanded');
 		$loading_page_video_tutorial_open_close = ($loading_page_video_tutorial == 'expanded') ? 'X' : '+';
 		$loading_page_video_tutorial_status = ($loading_page_video_tutorial == 'collapsed') ? 'lp-video-collapsed' : '';
@@ -616,6 +622,10 @@ if(!function_exists('loading_page_settings_page')){
                             <tr>
                                 <th><?php _e('Enable loading screen', LOADING_PAGE_TD); ?></th>
                                 <td><input aria-label="<?php print esc_attr(__('Enable loading screen', LOADING_PAGE_TD)); ?>" type="checkbox" name="lp_enabled_loading_screen" <?php echo((!empty($loading_page_options['enabled_loading_screen'])) ? 'CHECKED' : '' ); ?> /></td>
+                            </tr>
+							<tr>
+                                <th style="border-top:2px dashed green;border-left:2px dashed green;border-bottom:2px dashed green;padding-left:10px;"><?php _e('Show loading screen when clicking on link', LOADING_PAGE_TD); ?></th>
+                                <td style="border-top:2px dashed green;border-right:2px dashed green;border-bottom:2px dashed green;padding-left:10px;"><input aria-label="<?php print esc_attr(__('Show loading screen when clicking on link', LOADING_PAGE_TD)); ?>" type="checkbox" name="lp_from_trigger" <?php print !empty( $loading_page_options['from_trigger'] ) ? 'CHECKED' : ''; ?> /> <i style="color:green;"><?php _e('Display the loading screen as soon as the link on the current page is clicked, and not only when the next page is loaded.', LOADING_PAGE_TD); ?></i></td>
                             </tr>
 							<tr>
                                 <th><?php _e('Display a close screen button', LOADING_PAGE_TD); ?></th>

@@ -174,21 +174,9 @@ var cp_loadingpage = cp_loadingpage || {};
 		if( images.length ) lp.setLoadImgEvents();
 	};
 
-	// Main Code
-	if( typeof loading_page_settings != 'undefined' )
-	{
-		lp.options = lp.extend(default_options, loading_page_settings);
-	}
-	else
-	{
-		lp.options = default_options;
-	}
-	lp.options[ 'text' ] *= 1;
-	lp.options['loadingScreen'] *= 1;
-
-	if(lp.options['loadingScreen'] && lp.validateScreenSize())
-	{
-		jQuery(document).trigger('loadingScreenShow');
+    lp['displayScreen'] = function()
+    {
+        jQuery(document).trigger('loadingScreenShow');
 		if(lp.options['closeBtn'])
 		{
 			var close_btn = jQuery('<span class="lp-close-screen">X</span>');
@@ -202,6 +190,23 @@ var cp_loadingpage = cp_loadingpage || {};
 			var lpCodeBlock = document.getElementById('loading_page_codeBlock');
 			if(lpCodeBlock) lpCodeBlock.style.display='block';
 		}
+    };
+
+	// Main Code
+	if( typeof loading_page_settings != 'undefined' )
+	{
+		lp.options = lp.extend(default_options, loading_page_settings);
+	}
+	else
+	{
+		lp.options = default_options;
+	}
+	lp.options[ 'text' ] *= 1;
+	lp.options['loadingScreen'] *= 1;
+
+    if(lp.options['loadingScreen'] && lp.validateScreenSize())
+	{
+		lp.displayScreen();
 	}
 	else{
 		lp.displayBody();
